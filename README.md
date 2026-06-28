@@ -700,17 +700,13 @@ NexusAPI/
 │   └── main/
 │       ├── java/com/example/Nexus/
 │       │   ├── NexusApplication.java       ← Punto de entrada + registro del JwtFilter
-│       │   ├── auth/                       ← 🆕 Paquete de autenticación JWT
-│       │   │   ├── LoginRequest.java       ← DTO { username, password }
-│       │   │   ├── LoginResponse.java      ← DTO { token }
-│       │   │   ├── JwtService.java         ← Genera y valida tokens JWT
-│       │   │   ├── JwtFilter.java          ← Intercepta y valida cada request
-│       │   │   └── AuthController.java     ← POST /api/auth/login
 │       │   ├── controllers/                ← Capa HTTP (endpoints REST)
+│       │   │   ├── AuthController.java     ← 🆕 POST /api/auth/login
 │       │   │   ├── UserController.java
 │       │   │   ├── PostController.java     ← 🆕 Incluye GET /api/posts/mine
 │       │   │   └── CommentController.java
 │       │   ├── services/                   ← Lógica de negocio
+│       │   │   ├── JwtService.java         ← 🆕 Genera y valida tokens JWT
 │       │   │   ├── UserService.java
 │       │   │   ├── PostService.java        ← 🆕 Incluye getMyPosts(username)
 │       │   │   └── CommentService.java
@@ -723,9 +719,13 @@ NexusAPI/
 │       │   │   ├── Post.java
 │       │   │   └── Comment.java
 │       │   ├── dto/                        ← Objetos de transferencia de datos
+│       │   │   ├── LoginRequest.java       ← 🆕 DTO { username, password }
+│       │   │   ├── LoginResponse.java      ← 🆕 DTO { token }
 │       │   │   ├── UserRequest.java
 │       │   │   ├── PostRequest.java
 │       │   │   └── CommentRequest.java
+│       │   ├── security/                   ← 🆕 Seguridad de la API
+│       │   │   └── JwtFilter.java          ← Intercepta y valida cada request
 │       │   └── exceptions/                 ← Manejo global de errores
 │       │       ├── GlobalExceptionHandler.java
 │       │       └── ResourceNotFoundException.java

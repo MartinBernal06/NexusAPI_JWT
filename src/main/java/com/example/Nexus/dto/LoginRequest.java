@@ -1,4 +1,4 @@
-package com.example.Nexus.auth;
+package com.example.Nexus.dto;
 
 import lombok.Data;
 

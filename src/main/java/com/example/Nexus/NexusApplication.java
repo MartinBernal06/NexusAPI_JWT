@@ -1,6 +1,6 @@
 package com.example.Nexus;
 
-import com.example.Nexus.auth.JwtFilter;
+import com.example.Nexus.security.JwtFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

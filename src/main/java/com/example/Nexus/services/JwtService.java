@@ -1,4 +1,4 @@
-package com.example.Nexus.auth;
+package com.example.Nexus.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

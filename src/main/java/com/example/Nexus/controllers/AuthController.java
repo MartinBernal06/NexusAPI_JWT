@@ -1,5 +1,8 @@
-package com.example.Nexus.auth;
+package com.example.Nexus.controllers;
 
+import com.example.Nexus.dto.LoginRequest;
+import com.example.Nexus.dto.LoginResponse;
+import com.example.Nexus.services.JwtService;
 import com.example.Nexus.models.User;
 import com.example.Nexus.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;

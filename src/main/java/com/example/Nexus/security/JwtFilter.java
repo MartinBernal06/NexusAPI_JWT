@@ -1,5 +1,6 @@
-package com.example.Nexus.auth;
+package com.example.Nexus.security;
 
+import com.example.Nexus.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
