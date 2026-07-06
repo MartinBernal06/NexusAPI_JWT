@@ -71,6 +71,9 @@ public class JwtFilter extends OncePerRequestFilter {
         String method = request.getMethod();    // GET, POST, PUT, DELETE...
         String path   = request.getRequestURI(); // /api/auth/login, /api/posts, etc.
 
+        // Las solicitudes preflight de CORS usan el método OPTIONS y no deben requerir token
+        if (method.equalsIgnoreCase("OPTIONS")) return true;
+
         // El login siempre es público (es donde se obtiene el token)
         if (path.equals("/api/auth/login") && method.equals("POST")) return true;
 
