@@ -57,12 +57,11 @@ public class JwtFilter extends OncePerRequestFilter {
     /**
      * Define si una ruta es pública (no requiere autenticación).
      *
-     * Rutas públicas:
-     *   POST /api/auth/login  → aquí es donde SE OBTIENE el token
-     *   POST /api/users       → registro de nuevos usuarios
-     *   GET  /api/posts       → ver todos los posts (es público)
-     *   GET  /api/posts/{id}  → ver un post (es público)
-     *   GET  /api/comments/*  → ver comentarios (es público)
+     * Regla simple: SOLO login y registro son públicos.
+     * Todo lo demás (posts y comentarios) pide token.
+     *
+     *   POST /api/auth/login     → aquí es donde SE OBTIENE el token
+     *   POST /api/auth/register  → crear cuenta
      *
      * @param request la petición HTTP actual
      * @return true si la ruta es pública (no necesita token)
@@ -71,25 +70,8 @@ public class JwtFilter extends OncePerRequestFilter {
         String method = request.getMethod();    // GET, POST, PUT, DELETE...
         String path   = request.getRequestURI(); // /api/auth/login, /api/posts, etc.
 
-        // Las solicitudes preflight de CORS usan el método OPTIONS y no deben requerir token
-        if (method.equalsIgnoreCase("OPTIONS")) return true;
-
-        // El login siempre es público (es donde se obtiene el token)
-        if (path.equals("/api/auth/login") && method.equals("POST")) return true;
-
-        // El registro de usuarios es público (no necesitas estar logueado para registrarte)
-        if (path.equals("/api/users") && method.equals("POST")) return true;
-
-        // Ver todos los posts o un post específico es público
-        if (path.equals("/api/posts") && method.equals("GET")) return true;
-        if (path.startsWith("/api/posts/") && method.equals("GET")
-                && !path.equals("/api/posts/mine")) return true;
-
-        // Ver comentarios de un post es público
-        if (path.startsWith("/api/comments/post/") && method.equals("GET")) return true;
-
-        // Todo lo demás requiere autenticación
-        return false;
+        return method.equals("POST")
+                && (path.equals("/api/auth/login") || path.equals("/api/auth/register"));
     }
 
     // ================================================================
@@ -110,6 +92,18 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain chain)
             throws ServletException, IOException {
+
+        // NOTA PARA LOS ALUMNOS: Esto es SOLO para entorno de pruebas/desarrollo.
+        // Se abren los permisos de CORS para que cualquier frontend pueda consumir esta API sin bloqueos.
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept, Origin, X-Requested-With");
+
+        // Si es una petición preflight (OPTIONS), respondemos OK (200) de inmediato sin validar token
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
 
         // ── Paso 1: ¿Es una ruta pública? ──────────────────────────────
         if (isPublicRoute(request)) {
@@ -151,7 +145,8 @@ public class JwtFilter extends OncePerRequestFilter {
         // Guardamos el username (subject del token) como atributo del request.
         // Esto permite que cualquier Controller recupere el username del token
         // con: request.getAttribute("username")
-        // → Se usa en GET /api/posts/mine para filtrar por el usuario autenticado.
+        // → Se usa para crear posts, comentar y en GET /api/posts/mine.
+        //   Así el cliente nunca manda su id: la identidad sale del token firmado.
         //
         String username = jwtService.extractUsername(token);
         request.setAttribute("username", username);
