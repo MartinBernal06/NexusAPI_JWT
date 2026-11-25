@@ -1,7 +1,7 @@
 # 🔐 NexusAPI (con JWT)
 
 API REST de una red social básica (usuarios, posts y comentarios) hecha con **Spring Boot 4 + MySQL + JWT**.
-Es la versión **segura** de [NexusAPI sin JWT](https://github.com/Aplicaciones-Web-ITSON/Practica16_NexusAPP): aquí el usuario **nunca** manda su id, el servidor lo saca del token.
+Es la versión **segura** de [NexusAPI sin JWT](https://github.com/MartinBernal06/NexusAPI): aquí el usuario **nunca** manda su id, el servidor lo saca del token.
 
 ---
 
